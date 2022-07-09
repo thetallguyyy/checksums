@@ -55,11 +55,12 @@ python create.py -R --sha256 --reset-modified ~\backup
 Common tools can be used to verify integrity.
 
 ```
-sha256sum -c ~\backup\.checksums.sha256
+cd ~/backup
+sha256sum -c .checksums.sha256
 ```
 
 or
 
 ```
-python verify.py -Rv --sha256 ~\backup
+python verify.py -Rv --sha256 ~/backup
 ```
