@@ -1,3 +1,5 @@
+#!/bin/python3
+
 import common as cm
 
 parser = cm.ChecksumsArguments(prog='checksums-verify')

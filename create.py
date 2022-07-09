@@ -1,3 +1,5 @@
+#!/bin/python3
+
 import common as cm
 from datetime import datetime as dt
 
