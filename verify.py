@@ -12,7 +12,7 @@ for d in dirs:
     data = {}
 
     try:
-        if sf.is_file() and not args.reset_all:
+        if sf.is_file():
             data = cm.read_file(sf)
     except OSError as e:
         cm.print_error(e, e.filename)
@@ -20,13 +20,13 @@ for d in dirs:
 
     algorithm = sf.suffix.lstrip('.')
 
-    for df in cm.ifiles(d, hidden_files=args.hidden_files):
+    for df in cm.ifiles(d, include_hidden=args.include_hidden):
         if df not in data:
             cm.print_message('NEW', df)
             continue
 
-        if args.only_modified and cm.is_older(df, data[df]['created']):
-            continue
+        # if args.only_modified and cm.is_older(df, data[df]['created']):
+        #     continue
 
         try:
             if data[df]['checksum'] != cm.create_checksum(df, algorithm):
