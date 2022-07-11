@@ -18,8 +18,6 @@ for d in dirs:
         cm.print_error(e, e.filename)
         continue
 
-    algorithm = sf.suffix.lstrip('.')
-
     for df in cm.ifiles(d, include_hidden=args.include_hidden):
         if df not in data:
             cm.print_message('NEW', df)
@@ -29,7 +27,7 @@ for d in dirs:
         #     continue
 
         try:
-            if data[df]['checksum'] != cm.create_checksum(df, algorithm):
+            if data[df]['checksum'] != cm.create_checksum(df, args.algorithm):
                 cm.print_message('BAD', df)
             elif args.verbose:
                 cm.print_message('OK', df)
