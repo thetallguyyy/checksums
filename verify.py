@@ -3,6 +3,9 @@
 import common as cm
 
 parser = cm.ChecksumsArguments(prog='checksums-verify')
+speed = parser.add_mutually_exclusive_group()
+speed.add_argument('--only-modified', dest='only_modified', action='store_true',
+    help='skip unmodified files')
 args = parser.parse_args()
 dirs = cm.idirs(args.path, include_hidden=args.include_hidden) if args.recursive else (args.path,)
 name = f'{args.prefix}.{args.algorithm}'
@@ -23,8 +26,8 @@ for d in dirs:
             cm.print_message('NEW', df)
             continue
 
-        # if args.only_modified and cm.is_older(df, data[df]['created']):
-        #     continue
+        if args.only_modified and cm.is_older(df, data[df]['created']):
+            continue # log
 
         try:
             if data[df]['checksum'] != cm.create_checksum(df, args.algorithm):
