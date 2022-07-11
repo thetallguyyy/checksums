@@ -5,6 +5,7 @@ import pathlib
 import argparse
 import logging as lg
 from typing import Union
+from fnmatch import fnmatch
 from datetime import datetime as dt
 from collections.abc import Iterator, Iterable
 
@@ -53,7 +54,7 @@ def is_hidden(path: pathlib.Path) -> bool: # gonna include some windows stuff
 
 def walk(path: pathlib.Path, *,
          recursive: bool = True,
-         filters: Iterable = None,
+         filters: list|None = None,
          include_hidden: bool = False) -> Iterator[pathlib.Path]:
     
     if (path / '.nochecksums').is_file(): # scan relative dirs within
@@ -69,7 +70,7 @@ def walk(path: pathlib.Path, *,
             lg.debug(format_log_message('hidden', path))
             continue
 
-        if filters and any((i.match(x) for x in filters)):
+        if filters and any((fnmatch(i, x) for x in filters)):
             lg.debug(format_log_message('matched filter', path))
             continue
 
@@ -156,6 +157,16 @@ def write_file(path: pathlib.Path, data: dict, *,
                 f"#?{data[df]['created']}\n"
                 f"{data[df]['checksum']}{delimiter}{df.name}\n"
             ))
+
+def read_filter_file(path: pathlib.Path) -> list:
+    filters = []
+
+    with open(path, 'r', encoding='utf-8') as fp:
+        for line in fp:
+            if not line: continue
+            filters.append(line.strip())
+
+    return filters
 
 def is_newer(path: pathlib.Path, than: dt):
     return than <= dt.utcfromtimestamp(path.stat().st_mtime)
