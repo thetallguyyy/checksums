@@ -21,6 +21,9 @@ class ChecksumsArguments(argparse.ArgumentParser):
         self.add_argument('--include-hidden', dest='include_hidden',
             action='store_true', default=False,
             help='include hidden files and dirs')
+        self.add_argument('--filter-from', dest='filter_from', metavar='FILE',
+            type=pathlib.Path, help='filter from file containing ' + \
+            'shell-style wildcards')
         self.add_argument('--prefix', dest='prefix', type=str,
             default='.checksums', help='prefix to use for sumfiles')
         self.add_argument('-v', '--verbose', dest='verbose', action='store_true',
